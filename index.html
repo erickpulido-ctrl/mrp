@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MRP - LDR Solutions</title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    
+    <style>
+        :root { --primary: #0056b3; --success: #28a745; --warning: #ffc107; --danger: #dc3545; }
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .main-content { padding: 20px; }
+        .card { border: none; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.04); margin-bottom: 2rem; }
+        .card-header { background: #fff; border-bottom: 1px solid #f1f1f1; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+        
+        /* Badges LDR Style */
+        .badge-draft { background-color: #e2e8f0; color: #475569; }
+        .badge-review { background-color: #fef3c7; color: #92400e; }
+        .badge-approved { background-color: #dcfce7; color: #166534; }
+        .badge-rejected { background-color: #fee2e2; color: #991b1b; }
+        .badge-purchasing { background-color: #e0e7ff; color: #3730a3; }
+        
+        /* Layout Helpers */
+        .bg-dark-ldr { background-color: #1a202c; color: white; }
+        .table thead th { border-top: none; font-size: 0.75rem; color: #718096; text-transform: uppercase; }
+        .input-real-price { background-color: #fffbeb; border: 1px solid #fcd34d; font-weight: bold; }
+        .section-separator { border-top: 2px dashed #cbd5e0; margin: 4rem 0; position: relative; }
+        .section-separator::after { content: 'SIGUIENTE VISTA'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #cbd5e0; padding: 2px 15px; font-size: 10px; border-radius: 10px; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid">
+
+            <section id="view-index-general">
+                <div class="row align-items-center mb-4">
+                    <div class="col-md-6">
+                        <h3 class="font-weight-bold">Bandeja de Requisiciones</h3>
+                        <p class="text-muted">Gestión y seguimiento de solicitudes internas.</p>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button class="btn btn-primary shadow-sm px-4" id="btnNueva">
+                            <i class="ri-add-line mr-1"></i> Nueva Requisición
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Folio</th>
+                                        <th>Fecha</th>
+                                        <th>Solicitante</th>
+                                        <th>Estado</th>
+                                        <th class="text-right">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="font-weight-bold">#1024</td>
+                                        <td>04/02/2026</td>
+                                        <td>Ing. Alberto R.</td>
+                                        <td><span class="badge badge-review px-3 py-2">Pendiente</span></td>
+                                        <td class="text-right">
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-outline-secondary"><i class="ri-eye-line"></i></button>
+                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-separator"></div>
+
+            <section id="view-index-adquisiciones">
+                <div class="row align-items-center mb-4">
+                    <div class="col-md-6">
+                        <h3 class="font-weight-bold text-success"><i class="ri-check-double-line"></i> Adquisiciones Pendientes</h3>
+                        <p class="text-muted">Requisiciones autorizadas listas para compra.</p>
+                    </div>
+                </div>
+
+                <div class="card border-left-success" style="border-left: 5px solid var(--success) !important;">
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>Folio</th>
+                                    <th>Centro de Costo</th>
+                                    <th>Prioridad</th>
+                                    <th>Monto Est.</th>
+                                    <th class="text-right">Operación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-weight-bold">#1020</td>
+                                    <td>Mantenimiento - Planta LDR</td>
+                                    <td><span class="text-danger font-weight-bold">ALTA</span></td>
+                                    <td>$24,500.00</td>
+                                    <td class="text-right">
+                                        <button class="btn btn-success btn-sm px-4 shadow-sm">
+                                            Generar OC <i class="ri-arrow-right-line ml-1"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-separator"></div>
+
+            <section id="view-create-edit">
+                <div class="row align-items-center mb-4">
+                    <div class="col-md-8">
+                        <h3 class="font-weight-bold">Gestión de Requisición #<span id="folio-display">NUEVA</span></h3>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <button class="btn btn-light border mr-2">Cancelar</button>
+                        <button class="btn btn-primary shadow-sm px-4">Guardar Cambios</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">Captura de Partidas</div>
+                            <div class="card-body">
+                                <div class="form-row p-3 bg-light rounded mb-4">
+                                    <div class="col-md-6">
+                                        <label class="small font-weight-bold text-uppercase">Producto</label>
+                                        <input type="text" class="form-control" placeholder="Buscar por SKU...">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="small font-weight-bold text-uppercase">Cant.</label>
+                                        <input type="number" class="form-control" value="1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="small font-weight-bold text-uppercase">P. Est.</label>
+                                        <input type="number" class="form-control" placeholder="0.00">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>&nbsp;</label>
+                                        <button class="btn btn-dark btn-block"><i class="ri-add-line"></i></button>
+                                    </div>
+                                </div>
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Descripción</th>
+                                            <th width="80">Cant</th>
+                                            <th width="120">P. Unit</th>
+                                            <th width="120">Subtotal</th>
+                                            <th width="50"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Aceite Hidráulico ISO 68</td>
+                                            <td>5</td>
+                                            <td>$850.00</td>
+                                            <td>$4,250.00</td>
+                                            <td class="text-center"><i class="ri-delete-bin-line text-danger" style="cursor:pointer"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">General</div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label class="small font-weight-bold">Centro de Costo</label>
+                                    <select class="form-control"><option>Logística</option></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="small font-weight-bold">Prioridad</label>
+                                    <select class="form-control"><option>Media</option></select>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between h4 text-primary font-weight-bold">
+                                    <span>Total:</span>
+                                    <span>$4,250.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-separator"></div>
+
+            <section id="view-detail">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h3 class="font-weight-bold">Detalle de Requisición #1020</h3>
+                        <span class="badge badge-approved px-4 py-2">APROBADA</span>
+                    </div>
+                    <div class="col-md-6 text-right pt-3">
+                        <button class="btn btn-outline-danger shadow-sm mr-2"><i class="ri-file-pdf-line"></i> Exportar</button>
+                        <button class="btn btn-warning shadow-sm px-4">Editar Borrador</button>
+                    </div>
+                </div>
+
+                <div class="card bg-white">
+                    <div class="card-body row text-center">
+                        <div class="col-md-3 border-right"><label class="small text-muted d-block">Solicitante</label><strong>Alberto Ramos</strong></div>
+                        <div class="col-md-3 border-right"><label class="small text-muted d-block">Fecha Solicitud</label><strong>04/02/2026</strong></div>
+                        <div class="col-md-3 border-right"><label class="small text-muted d-block">Centro Costo</label><strong>Planta LDR</strong></div>
+                        <div class="col-md-3"><label class="small text-muted d-block">Total Estimado</label><strong class="text-primary font-weight-bold">$24,500.00</strong></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Artículos Autorizados</div>
+                    <div class="card-body p-0">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="pl-4">#</th>
+                                    <th>Descripción del Producto</th>
+                                    <th class="text-center">Cant.</th>
+                                    <th class="text-right">P. Unit Est.</th>
+                                    <th class="text-right pr-4">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="pl-4">1</td>
+                                    <td>Neumático Delantero Camión 12R22.5</td>
+                                    <td class="text-center">4</td>
+                                    <td class="text-right">$6,125.00</td>
+                                    <td class="text-right pr-4">$24,500.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><i class="ri-history-line mr-2"></i> Bitácora de Seguimiento</div>
+                    <div class="card-body p-0">
+                        <table class="table table-sm table-striped mb-0 small text-muted">
+                            <tbody>
+                                <tr>
+                                    <td width="200" class="pl-4 py-3">04/02/2026 09:15 AM</td>
+                                    <td class="py-3 text-dark"><strong>Alberto Ramos</strong> creó la requisición.</td>
+                                </tr>
+                                <tr>
+                                    <td class="pl-4 py-3">04/02/2026 11:30 AM</td>
+                                    <td class="py-3 text-dark"><strong>Gerencia</strong> aprobó la requisición. <br> <span class="text-muted italic">"Aprobado para mantenimiento preventivo."</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <div class="section-separator"></div>
+
+            <section id="view-generate-oc" class="pb-5">
+                <div class="row align-items-center mb-4">
+                    <div class="col-md-8">
+                        <h3 class="font-weight-bold text-primary">Generar Orden de Compra</h3>
+                        <p class="text-muted">Conversión de Requisición #1020 a compromiso de compra.</p>
+                    </div>
+                    <div class="col-md-4 text-right">
+                        <button class="btn btn-primary btn-lg px-5 shadow">Generar OC Final</button>
+                    </div>
+                </div>
+
+                <div class="card bg-dark-ldr mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 border-right border-secondary">
+                                <label class="small font-weight-bold">Proveedor Adjudicado</label>
+                                <select class="form-control form-control-lg bg-dark text-white border-0">
+                                    <option>Seleccionar Proveedor del Catálogo LDR...</option>
+                                    <option>Llantas y Neumáticos S.A.</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 border-right border-secondary pl-4">
+                                <label class="small font-weight-bold">Moneda</label>
+                                <select class="form-control bg-dark text-white border-0"><option>MXN - Pesos</option></select>
+                            </div>
+                            <div class="col-md-3 pl-4">
+                                <label class="small font-weight-bold">Términos</label>
+                                <select class="form-control bg-dark text-white border-0"><option>Crédito 30 Días</option></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow">
+                    <div class="card-header">Ajuste de Precios Reales</div>
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="pl-4">Producto</th>
+                                    <th width="100">Cant.</th>
+                                    <th width="150">P. Estimado</th>
+                                    <th width="200" class="text-primary font-weight-bold">PRECIO REAL</th>
+                                    <th width="150">Ahorro</th>
+                                    <th width="150" class="pr-4">Subtotal Real</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="pl-4 font-weight-bold">Neumático Delantero Camión 12R22.5</td>
+                                    <td class="text-center">4</td>
+                                    <td class="text-muted">$6,125.00</td>
+                                    <td>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                                            <input type="number" class="form-control input-real-price" value="5900.00">
+                                        </div>
+                                    </td>
+                                    <td class="text-success font-weight-bold">-$900.00</td>
+                                    <td class="font-weight-bold pr-4 text-right">$23,600.00</td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="bg-light">
+                                <tr class="h5">
+                                    <td colspan="5" class="text-right border-0 pl-4 font-weight-bold">Monto Total de la OC:</td>
+                                    <td class="text-right border-0 pr-4 text-success font-weight-bold">$23,600.00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>
